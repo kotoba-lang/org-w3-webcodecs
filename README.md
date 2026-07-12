@@ -69,11 +69,61 @@ Node WebCodecs implementation, so correctness for that half is pinned by
 
 ## Status
 
-**v0 — thin binding layer + portable codec-string module.** No codec
-bitstream implementation (that's `utsushi`'s H.264 encode/decode work,
-landing alongside this repo). No real-browser E2E yet — per ADR-2607121400's
-completion gates, real-browser WebCodecs decode/encode round-trip
-verification is a separate, later completion item, not claimed here.
+**v0 — thin binding layer + portable codec-string module**, now with a
+**real-browser E2E proof** (ADR-2607121400 completion gate: real browser
+WebCodecs decode/encode round-trip). No codec bitstream implementation
+lives here (that's `utsushi`'s / `org-iso-h264`'s H.264 parameter-set
+work) — the E2E below proves the opposite complementary claim: that this
+repo's binding correctly drives the **browser's own native codec** for
+real pixel-level encode and decode, without either repo needing to
+implement DCT/CAVLC/macroblock coding itself. This is the deliberate
+strategy for video-domain "commercial-grade" maturity in ADR-2607121400:
+delegate actual video compression to the browser's native, hardware-backed
+WebCodecs implementation (the same pattern used for 3D — delegate pixel/
+GPU work to native WebGPU rather than reimplementing a GPU), and keep
+`org-iso-h264` scoped to container/parameter-set framing only.
+
+## Real-browser E2E (`test/e2e/`)
+
+`test/e2e/run_e2e.cljs` (nbb + Playwright, per this workspace's Node-harness
+convention — no raw `.mjs`) launches a real headless Chromium, serves
+`test/e2e/page/index.html` over a local HTTP server (WebCodecs requires a
+secure context — `about:blank`/`file:` do not expose `VideoDecoder`/
+`VideoEncoder`), and in the page:
+
+1. draws a 64x64 four-quadrant test image (distinct solid colors) to a
+   `<canvas>`
+2. wraps it as a real `VideoFrame` and encodes it with this repo's own
+   compiled `w3.webcodecs/make-video-encoder` + `configure-video-encoder!`
+   + `encode-video-frame!` (codec `avc1.42001f`, H.264 baseline)
+3. decodes the resulting `EncodedVideoChunk`(s) back with
+   `w3.webcodecs/make-video-decoder` + `configure-video-decoder!` +
+   `decode-video-chunk!`, using the `description` (avcC) the encoder
+   itself emitted
+4. draws the decoded `VideoFrame` to a second canvas and reads back real
+   pixel values per quadrant
+
+Real measured result (Chromium 149, Playwright-bundled): all four
+quadrants decoded within a few RGB units of the original (e.g. `(230,20,20)`
+in -> `(228,21,19)` out), well inside a 40-unit lossy-compression tolerance
+— i.e. **actual H.264 pixel-level encode and decode**, not container/
+metadata parsing.
+
+Setup and run:
+
+```
+npm --prefix test/e2e install         # Playwright
+npx --prefix test/e2e playwright install chromium
+bash scripts/build-e2e-bundle.sh      # compiles src/w3/webcodecs.cljs -> test/e2e/page/webcodecs-bundle.js
+                                       # (JVM/Clojure CLI build step — the ClojureScript
+                                       # compiler itself has no alternative; this is a
+                                       # build tool, not an app-runtime choice)
+nbb test/e2e/run_e2e.cljs
+```
+
+Exits 0 and prints the JSON result (including per-quadrant decoded RGB
+values) on pass; exits 1 on any real failure (codec unsupported, decode
+mismatch beyond tolerance, etc.) — no silent degradation.
 
 ## Develop
 
