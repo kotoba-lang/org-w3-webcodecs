@@ -1,0 +1,16 @@
+;; org-w3-webcodecs — raw W3C WebCodecs JS API thin wrapper (browser-only
+;; VideoDecoder/VideoEncoder binding) plus a portable codec-string
+;; parser/formatter (w3.webcodecs.codec-string, .cljc, has real tests).
+;; Codec bitstream implementation lives one level up in kotoba-lang/utsushi,
+;; the same way kami-webgpu is the EDN vocabulary layer above org-w3-webgpu.
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/clojurescript {:mvn/version "1.11.132"}}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
+                      io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]}
+  :lint {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.03.13"}}
+         :main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]}}}

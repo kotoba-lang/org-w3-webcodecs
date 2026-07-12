@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: clojure test (portable codec-string module)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Clojure CLI
+        uses: DeLaGuardo/setup-clojure@13.1
+        with:
+          cli: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache m2 / gitlibs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            ~/.gitlibs
+          key: ${{ runner.os }}-clj-org-w3-webcodecs
+          restore-keys: |
+            ${{ runner.os }}-clj-
+
+      - name: Test
+        run: clojure -M:test
+
+      - name: Lint
+        run: clojure -M:lint
+
+  compile-check:
+    name: cljs compile check (browser-only binding layer)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Clojure CLI
+        uses: DeLaGuardo/setup-clojure@13.1
+        with:
+          cli: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache m2 / gitlibs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            ~/.gitlibs
+          key: ${{ runner.os }}-clj-cljs-compile-check-org-w3-webcodecs
+          restore-keys: |
+            ${{ runner.os }}-clj-
+
+      # w3.webcodecs (VideoDecoder/VideoEncoder binding) has no runtime test
+      # suite -- those globals don't exist under Node. The cljs compile
+      # itself catches syntax/require/macro-expansion errors, same as
+      # org-w3-webgpu's CI.
+      - name: Compile-check
+        run: |
+          clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.11.132"}} :paths ["src"]}' \
+            -M -m cljs.main --compile w3.webcodecs
