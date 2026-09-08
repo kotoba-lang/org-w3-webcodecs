@@ -9,7 +9,7 @@
    dependency (unlike VideoDecoder/VideoEncoder construction, which needs a
    real UA — see w3.webcodecs), so unlike org-w3-webgpu (zero portable logic,
    no test suite) this namespace is `.cljc` and carries real tests."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; --- AVC (H.264) `avc1.PPCCLL` ---------------------------------------------
 ;;
@@ -46,7 +46,7 @@
   [b]
   (let [s #?(:clj  (Integer/toHexString (bit-and b 0xFF))
              :cljs (.toString (bit-and b 0xFF) 16))
-        s (str/upper-case s)]
+        s (str/upper s)]
     (if (= 1 (count s)) (str "0" s) s)))
 
 (defn- parse-hex-byte [s]
