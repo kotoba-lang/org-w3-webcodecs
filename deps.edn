@@ -15,7 +15,7 @@
  {:test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
                       io.github.cognitect-labs/test-runner
-                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd6605cb6c0efc275e1df1736f6e90d4d73"}
                       ;; TEST-ONLY. Parity compiles kotoba/w3/webcodecs/
                       ;; codec_string.{kotoba,cljk} to KIR and runs it against
                       ;; w3.webcodecs.codec-string. Nothing in :paths depends on
@@ -34,7 +34,7 @@
   {:extra-paths ["test"]
    :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
                 io.github.cognitect-labs/test-runner
-                {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+                {:git/tag "v0.5.1" :git/sha "dfb30dd6605cb6c0efc275e1df1736f6e90d4d73"}}
    :main-opts ["-m" "cognitect.test-runner" "-n" "w3.webcodecs.codec-string-test"]}
   :lint {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.03.13"}}
          :main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]}}}
