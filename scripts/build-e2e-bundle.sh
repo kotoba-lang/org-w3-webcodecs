@@ -6,7 +6,7 @@
 # actually runs in the browser page.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-clojure -M -m cljs.main --optimizations simple \
+kbb -M -m cljs.main --optimizations simple \
   --output-to test/e2e/page/webcodecs-bundle.js \
   -c w3.webcodecs
 echo "wrote test/e2e/page/webcodecs-bundle.js"

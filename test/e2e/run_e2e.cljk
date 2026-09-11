@@ -11,7 +11,7 @@
    Requires: `bash scripts/build-e2e-bundle.sh` run first, and
    `npm install` inside test/e2e/ for the Playwright dependency.
 
-   Run from the repo root: `nbb test/e2e/run_e2e.cljk`"
+   Run from the repo root: `kbb --backend sci test/e2e/run_e2e.cljk`"
   (:require ["playwright" :refer [chromium]]
             ["http" :as http]
             ["fs" :as fs]

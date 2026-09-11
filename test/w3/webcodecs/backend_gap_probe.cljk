@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 ;; The backend absences `kotoba/w3/webcodecs/codec_string.kotoba` is written
 ;; around, asserted to STILL REPRODUCE -- and failing when they stop.
 ;;
@@ -12,7 +12,7 @@
 ;; `which`: a shim that resolves and then fails to exec turns a skip into a red
 ;; for the wrong reason.
 ;;
-;;   nbb test/w3/webcodecs/backend_gap_probe.cljk
+;;   kbb --backend sci test/w3/webcodecs/backend_gap_probe.cljk
 
 (ns backend-gap-probe
   (:require ["node:child_process" :as cp]
@@ -112,7 +112,7 @@
         (do (println (count fixed) "of" (count results) "gaps are gone. What can be simplified:")
             (doseq [{:keys [simplify]} fixed] (println "   -" simplify))
             (println)
-            (println "Re-run `kotoba -M test` and `clojure -M:test` after simplifying,")
+            (println "Re-run `kotoba -M test` and `kbb -M:test` after simplifying,")
             (println "and delete the corresponding note from the component header.")
             (js/process.exit 1))
         (do (println "All" (count results) "still hold, so the component's shape is still the right one.")
