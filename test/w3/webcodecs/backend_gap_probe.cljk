@@ -12,7 +12,7 @@
 ;; `which`: a shim that resolves and then fails to exec turns a skip into a red
 ;; for the wrong reason.
 ;;
-;;   nbb test/w3/webcodecs/backend_gap_probe.cljs
+;;   nbb test/w3/webcodecs/backend_gap_probe.cljk
 
 (ns backend-gap-probe
   (:require ["node:child_process" :as cp]

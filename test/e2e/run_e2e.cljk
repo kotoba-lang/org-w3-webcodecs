@@ -1,6 +1,6 @@
 (ns run-e2e
   "Real-browser E2E proof for org-w3-webcodecs (ADR-2607121400 completion
-   gate: real browser WebCodecs E2E). Compiles src/w3/webcodecs.cljs to a
+   gate: real browser WebCodecs E2E). Compiles src/w3/webcodecs.cljk to a
    browser bundle (scripts/build-e2e-bundle.sh), serves test/e2e/page/ over
    HTTP (WebCodecs requires a secure context — about:blank/file: do not
    expose VideoDecoder/VideoEncoder), drives a real headless Chromium via
@@ -11,7 +11,7 @@
    Requires: `bash scripts/build-e2e-bundle.sh` run first, and
    `npm install` inside test/e2e/ for the Playwright dependency.
 
-   Run from the repo root: `nbb test/e2e/run_e2e.cljs`"
+   Run from the repo root: `nbb test/e2e/run_e2e.cljk`"
   (:require ["playwright" :refer [chromium]]
             ["http" :as http]
             ["fs" :as fs]
