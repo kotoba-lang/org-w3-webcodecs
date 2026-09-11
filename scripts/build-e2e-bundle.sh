@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Compiles src/w3/webcodecs.cljs -> test/e2e/page/webcodecs-bundle.js for the
+# Compiles src/w3/webcodecs.cljk -> test/e2e/page/webcodecs-bundle.js for the
 # browser E2E harness. Requires the Clojure CLI (JVM) — this is a BUILD-time
 # tool only (the ClojureScript compiler itself runs on the JVM; there is no
 # alternative), not an app-runtime choice. The compiled bundle is what

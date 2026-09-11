@@ -217,7 +217,7 @@
         ;; `(document-bool (p ...))` where `p` returns `:bool` from an `and`
         ;; fails with `value is not a boolean`, while the js and wasm lowerings
         ;; of the same source accept it. Wrapping makes the boolean explicit and
-        ;; all three agree. `test/w3/webcodecs/backend_gap_probe.cljs` asserts the
+        ;; all three agree. `test/w3/webcodecs/backend_gap_probe.cljk` asserts the
         ;; divergence still reproduces and goes red when it stops.
         :level-1b (document-bool (if (level-1b? level-idc flags) true false))))))
 

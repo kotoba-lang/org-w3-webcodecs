@@ -85,7 +85,7 @@ GPU work to native WebGPU rather than reimplementing a GPU), and keep
 
 ## Real-browser E2E (`test/e2e/`)
 
-`test/e2e/run_e2e.cljs` (nbb + Playwright, per this workspace's Node-harness
+`test/e2e/run_e2e.cljk` (nbb + Playwright, per this workspace's Node-harness
 convention — no raw `.mjs`) launches a real headless Chromium, serves
 `test/e2e/page/index.html` over a local HTTP server (WebCodecs requires a
 secure context — `about:blank`/`file:` do not expose `VideoDecoder`/
@@ -114,11 +114,11 @@ Setup and run:
 ```
 npm --prefix test/e2e install         # Playwright
 npx --prefix test/e2e playwright install chromium
-bash scripts/build-e2e-bundle.sh      # compiles src/w3/webcodecs.cljs -> test/e2e/page/webcodecs-bundle.js
+bash scripts/build-e2e-bundle.sh      # compiles src/w3/webcodecs.cljk -> test/e2e/page/webcodecs-bundle.js
                                        # (JVM/Clojure CLI build step — the ClojureScript
                                        # compiler itself has no alternative; this is a
                                        # build tool, not an app-runtime choice)
-nbb test/e2e/run_e2e.cljs
+nbb test/e2e/run_e2e.cljk
 ```
 
 Exits 0 and prints the JSON result (including per-quadrant decoded RGB
