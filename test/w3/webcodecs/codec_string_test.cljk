@@ -1,6 +1,6 @@
 (ns w3.webcodecs.codec-string-test
   (:require [w3.webcodecs.codec-string :as cs]
-            #?(:clj  [clojure.test :refer [deftest is testing]]
+            #?(:clj  [kotoba.test :refer [deftest is testing]]
                :cljs [cljs.test :refer [deftest is testing]])))
 
 (deftest parse-known-values
